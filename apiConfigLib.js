@@ -10,12 +10,19 @@ REST2DDP = {
 replaceVarInConfig = function (config, variables) {
   if (variables) {
     let replacedConfig = {};
+    let varString='?';
     for (var key of Object.keys(config)) {
       replacedConfig[key] = config[key];
-      for (var varName of Object.keys(variables)) {
-        if (key === 'restUrl') {
-          replacedConfig[key]=replacedConfig[key].replace("${" + varName + "}", variables[varName]);
+      if (key === 'restUrl') {
+        for (var varName of Object.keys(variables)) {
+          if(varString!='?')
+            varString+='&';
+          varString+=varName+'='+variables[varName];
+          //replacedConfig[key]+=varName+'='+variables[varName];
+          //replacedConfig[key]=replacedConfig[key].replace(varName+"=${" + varName + "}", varName+"="+variables[varName]);
+          //console.log(varString);
         }
+        replacedConfig[key]+=varString;
       }
     }
     return replacedConfig;
